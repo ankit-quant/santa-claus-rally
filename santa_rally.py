@@ -27,23 +27,16 @@ def analyze_santa_clauss_rally(data: pd.DataFrame, dec_days, jan_days):
         january_data = df[(df['Year'] == year + 1) & (df['Month'] == 1)]
 
         if not december_data.empty and not january_data.empty:
-            # Last 5 days of December
             december_rally = december_data.tail(dec_days)
-
-            # First 2 days of January
             january_rally = january_data.head(jan_days)
 
-            # Combine the data
             santa_claus_rally_period = pd.concat(
                 [december_rally, january_rally])
 
-            # Calculate the return
             start_price = santa_claus_rally_period.iloc[0]['Close']
             end_price = santa_claus_rally_period.iloc[-1]['Close']
             rally_return = (end_price - start_price) / start_price
-
             rally_results.append((year, rally_return))
-
     return pd.DataFrame(rally_results, columns=['Year', 'Return'])
 
 
@@ -56,21 +49,17 @@ def results_output(data: pd.DataFrame, index_name, dec_days, jan_days):
     total_return = (results['Return'].sum()) * 100
     print(f"{index_name} - Avg Return: {100*average_return:.2f}%, Positive(%): {percentage_positive:.2f}, Total Return: {total_return:.2f}% Dec Days:{dec_days},Jan Days:{jan_days}")
     print(results)
-    # Plot cumulative returns
     plot_returns(results, index_name, percentage_positive,
                  average_return, dec_days, jan_days)
 
-
 def calculate_cagr(start_value, end_value, periods):
     return (end_value / start_value) ** (1 / periods) - 1
-
 
 def plot_returns(data: pd.DataFrame, index_name, win_rate, avg_ret, dec_days, jan_days):
     path = r"path"
     file_name = f"{index_name}_{dec_days}_{jan_days}.png"
 
     cumulative_returns = 100*((1 + data['Return']).cumprod() - 1)
-
     # Calculate total return and CAGR
     total_return = cumulative_returns.iloc[-1]
     start_year = data['Year'].iloc[0]
@@ -80,10 +69,7 @@ def plot_returns(data: pd.DataFrame, index_name, win_rate, avg_ret, dec_days, ja
     cagr = calculate_cagr(
         1, cumulative_returns.iloc[-1]*0.01 + 1, periods) * 100
 
-    # Set Seaborn style
     sns.set_style("whitegrid")
-
-    # Creating the plot with Seaborn
     plt.figure(figsize=(12, 6))
     sns.lineplot(x='Year', y=cumulative_returns, data=data, marker='o')
     plt.title(
@@ -111,4 +97,3 @@ if __name__ == "__main__":
                            dec_days=dec_day, jan_days=jan_day)
             results_output(nf_daily, index_name="NIFTY",
                            dec_days=dec_day, jan_days=jan_day)
-    x = 0
