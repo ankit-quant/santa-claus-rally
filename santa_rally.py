@@ -14,7 +14,7 @@ def resample_daily(df_min: pd.DataFrame):
     return df
 
 
-def analyze_santa_clauss_rally(data: pd.DataFrame, dec_days, jan_days):
+def analyze_santa_clauss_rally(data: pd.DataFrame, dec_days:int, jan_days:int):
     df = data.copy()
     df['Year'] = df.index.year
     df['Month'] = df.index.month
@@ -40,7 +40,7 @@ def analyze_santa_clauss_rally(data: pd.DataFrame, dec_days, jan_days):
     return pd.DataFrame(rally_results, columns=['Year', 'Return'])
 
 
-def results_output(data: pd.DataFrame, index_name, dec_days, jan_days):
+def results_output(data: pd.DataFrame, index_name:str, dec_days:int, jan_days:int):
     df = data.copy()
     results = analyze_santa_clauss_rally(df, dec_days, jan_days)
     average_return = results['Return'].mean()
@@ -55,7 +55,7 @@ def results_output(data: pd.DataFrame, index_name, dec_days, jan_days):
 def calculate_cagr(start_value, end_value, periods):
     return (end_value / start_value) ** (1 / periods) - 1
 
-def plot_returns(data: pd.DataFrame, index_name, win_rate, avg_ret, dec_days, jan_days):
+def plot_returns(data: pd.DataFrame, index_name:str, win_rate:float, avg_ret:float, dec_days:int, jan_days:int):
     path = r"path"
     file_name = f"{index_name}_{dec_days}_{jan_days}.png"
 
